@@ -1,5 +1,7 @@
 <?php
+
 class LoginDAO {
+
     private $conexao;
     
     public function __construct() {
@@ -19,17 +21,18 @@ class LoginDAO {
     public function insert(LoginModel $model) {
         $sql = "INSERT INTO login (email, senha) VALUES (?, ?)";
         $stmt = $this->conexao->prepare($sql);
-        $stmt->bindValue(1, $model->getEmail());
-        $stmt->bindValue(2, $model->getSenha());
+        $stmt->bindValue(1, $model->email);
+        $stmt->bindValue(2, $model->senha);
         $stmt->execute();
+        return $this->conexao->lastInsertId();
     }
     
     public function update(LoginModel $model) {
         $sql = "UPDATE login SET email = ?, senha = ? WHERE id = ?";
         $stmt = $this->conexao->prepare($sql);
-        $stmt->bindValue(1, $model->getEmail());
-        $stmt->bindValue(3, $model->getSenha());
-        $stmt->bindValue(3, $model->getId());
+        $stmt->bindValue(1, $model->email);
+        $stmt->bindValue(3, $model->senha);
+        $stmt->bindValue(3, $model->id);
         $stmt->execute();
     }
     
@@ -41,33 +44,23 @@ class LoginDAO {
     }
     
     public function getById(int $id) {
+        include_once 'Model/LoginModel.php';
         $sql = "SELECT * FROM login WHERE id = ?";
         $stmt = $this->conexao->prepare($sql);
         $stmt->bindValue(1, $id);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        $login = new LoginModel();
-        $login->setId($row['id']);
-        $login->setEmail($row['email']);
-        $login->setSenha($row['senha']);
-        
-        return $login;
+        return $stmt->fetchObject("LoginModel");
     }
     
-    public function getByEmail(string $email) {
+    public function selectByEmail(string $email) {
+        include_once 'Model/LoginModel.php';
         $sql = "SELECT * FROM login WHERE email = ?";
         $stmt = $this->conexao->prepare($sql);
         $stmt->bindValue(1, $email);
         $stmt->execute();
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        $login = new LoginModel();
-        $login->setId($row['id']);
-        $login->setEmail($row['email']);
-        $login->setSenha($row['senha']);
-        
-        return $login;
+        return $stmt->fetchObject("LoginModel");
     }
     
 }
+
