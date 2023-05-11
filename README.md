@@ -18,7 +18,7 @@ Seguindo estas etapas, você configurará com sucesso o banco de dados para a ap
 
 Certifique-se de verificar todas as etapas cuidadosamente para evitar quaisquer erros ou problemas de configuração.
 
-**Observação:** Se você estiver usando o Docker Compose para criar e executar contêineres, **não será necessário criar manualmente um banco de dados ou importar o arquivo "db.sql".** O Docker Compose lidará com o processo de criação do banco de dados e da importação do arquivo "db.sql" automaticamente. Certifique-se de verificar o arquivo "docker-compose.yml" para confirmar que as configurações do serviço de banco de dados estão definidas corretamente.
+**Observação:** *Se você estiver usando o Docker Compose para criar e executar contêineres, **não será necessário criar manualmente um banco de dados ou importar o arquivo "db.sql".** O Docker Compose lidará com o processo de criação do banco de dados e da importação do arquivo "db.sql" automaticamente. Certifique-se de verificar o arquivo "docker-compose.yml" para confirmar que as configurações do serviço de banco de dados estão definidas corretamente.*
 
 # Executando
 
