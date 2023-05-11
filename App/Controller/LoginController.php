@@ -1,58 +1,72 @@
 <?php
 
-/**
- * Classe Controller responsável por autenticar o usuário no sistema.
- */
 class LoginController 
 {
-    /**
-     * Método para exibir o formulário de login.
-     */
     public static function login()
     {
         include 'View/Login/Login.php';
     }
 
-    /**
-     * Método para autenticar o usuário no sistema.
-     */
+    public static function register()
+    {
+        include 'View/Login/Register.php';
+    }
+
     public static function authenticate()
     {
-        include 'Model/UserModel.php';
+       
 
-        // Obtém os dados do usuário informados no formulário de login
-        $username = $_POST['username'];
+        $email = $_POST['email'];
         $password = $_POST['password'];
 
-        // Verifica se o usuário existe na base de dados
-        $userModel = new UserModel();
-        $user = $userModel->getUserByUsername($username);
+        include 'Model/LoginModel.php';
+        $loginModel = new LoginModel();
+        $login = $loginModel->getByEmail($email);
 
-        if (!$user) {
-            // Se o usuário não existir, exibe mensagem de erro e redireciona para o formulário de login
+        if (!$login) {
+            $_SESSION['flash'] = 'Usuário ou senha inválidos';
+            header("Location: /login");
+            exit;
+        }
+       
+        if ($password != $login->senha) {
             $_SESSION['flash'] = 'Usuário ou senha inválidos';
             header("Location: /login");
             exit;
         }
 
-        // Verifica se a senha informada está correta
-        if (!password_verify($password, $user['password'])) {
-            // Se a senha estiver incorreta, exibe mensagem de erro e redireciona para o formulário de login
-            $_SESSION['flash'] = 'Usuário ou senha inválidos';
-            header("Location: /login");
-            exit;
-        }
-
-        // Se o usuário e senha estiverem corretos, inicia a sessão do usuário e redireciona para a página inicial
         session_start();
-        $_SESSION['user'] = $user;
+        $_SESSION['login'] = $login;
         header("Location: /");
         exit;
     }
 
-    /**
-     * Método para deslogar o usuário do sistema.
-     */
+    public static function save()
+    {
+        include 'Model/LoginModel.php';
+        $loginModel = new LoginModel();
+        $loginModel->id = $_POST['id'];
+        $loginModel->email = $_POST['email'];
+        $loginModel->senha = $_POST['password'];
+        /*
+        // isso nao esta funcionando 
+        $login = $loginModel->getByEmail($loginModel->email);
+
+        if ($login->email == $loginModel->email) {
+            // Se o usuário já existir, exibe mensagem de erro e redireciona para o formulário de registro
+            $_SESSION['flash'] = 'Usuário já existente';
+            header("Location: /registerLogin");
+            exit;
+        }
+        */
+
+        $loginModel->save(); 
+
+        header("Location: /usuario?login_id=$loginModel->id");
+        exit;
+
+    }
+
     public static function logout()
     {
         session_start();
@@ -61,3 +75,5 @@ class LoginController
         exit;
     }
 }
+
+?>
