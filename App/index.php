@@ -1,24 +1,41 @@
 <?php
 
 include 'Controller/LoginController.php';
-
-#$url = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+include 'Controller/CurriculoController.php';
+include 'Controller/UsuarioController.php';
 
 $url = isset($_GET['url']) ? $_GET['url'] : '/';
 
 switch($url)
 {
     case '/':
-        echo "página inicial";
+        //CurriculoController::curriculo();
+        include 'View/index.php';
     break;
 
-    case 'home':
-        echo "página home";
+    case 'usuario':
+        UsuarioController::formUsuario();
+    break;
+
+    case 'usuario/salve':
+        UsuarioController::save();
+    break;
+
+    case 'curriculoRegistre':
+        CurriculoController::save();
     break;
 
     case 'login':
         LoginController::login();
     break;
+
+    case 'login/register':
+        LoginController::register();
+    break;
+    
+    case 'login/save':
+        LoginController::save();
+        break;
 
     case 'login/authenticate':
         LoginController::authenticate();
