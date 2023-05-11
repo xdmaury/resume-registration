@@ -11,7 +11,7 @@ class LoginModel
         $dao = new LoginDAO();
 
         if (empty($this->id)) {
-            $dao->insert($this);
+            $this->id = $dao->insert($this);
         } else {
             $dao->update($this);
         }
@@ -29,6 +29,13 @@ class LoginModel
         include 'DAO/LoginDAO.php';
         $dao = new LoginDAO();
         $obj = $dao->selectById($id);
+        return ($obj) ? $obj : new LoginModel();
+    }
+    public function getByEmail(string $email)
+    {
+        include 'DAO/LoginDAO.php';
+        $dao = new LoginDAO();
+        $obj = $dao->selectByEmail($email);
         return ($obj) ? $obj : new LoginModel();
     }
 
